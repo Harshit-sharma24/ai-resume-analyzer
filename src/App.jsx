@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
-import workerSrc from "pdfjs-dist/build/pdf.worker?url";
+import workerSrc from "pdfjs-dist/build/pdf.worker.min.js?url";
 import mammoth from "mammoth";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
@@ -14,21 +14,26 @@ function App() {
 
   // TEXT EXTRACT
   const extractText = async (file) => {
+  try {
     if (file.type === "application/pdf") {
       const reader = new FileReader();
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         reader.onload = async function () {
-          const pdf = await pdfjsLib.getDocument(
-            new Uint8Array(this.result)
-          ).promise;
+          try {
+            const pdf = await pdfjsLib.getDocument(
+              new Uint8Array(this.result)
+            ).promise;
 
-          let text = "";
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            text += content.items.map((i) => i.str).join(" ") + " ";
+            let text = "";
+            for (let i = 1; i <= pdf.numPages; i++) {
+              const page = await pdf.getPage(i);
+              const content = await page.getTextContent();
+              text += content.items.map((i) => i.str).join(" ") + " ";
+            }
+            resolve(text);
+          } catch (e) {
+            reject(e);
           }
-          resolve(text);
         };
         reader.readAsArrayBuffer(file);
       });
@@ -41,15 +46,20 @@ function App() {
       const result = await mammoth.extractRawText({ arrayBuffer: buffer });
       return result.value;
     }
-  };
+  } catch (err) {
+    console.error(err);
+    return "Error reading file";
+  }
+};
 
   // AI CALL
   const handleUpload = async () => {
-    if (!file) return alert("Upload resume");
+  if (!file) return alert("Upload resume");
 
-    setLoading(true);
-    setAiResult("");
+  setLoading(true);
+  setAiResult("");
 
+  try {
     let text = await extractText(file);
 
     const res = await fetch(
@@ -81,10 +91,20 @@ ${text.slice(0, 1200)}`,
       }
     );
 
+    if (!res.ok) {
+      throw new Error("API Error: " + res.status);
+    }
+
     const data = await res.json();
-    setAiResult(data.choices?.[0]?.message?.content || "");
-    setLoading(false);
-  };
+    setAiResult(data.choices?.[0]?.message?.content || "No response");
+
+  } catch (err) {
+    console.error(err);
+    alert("Error aa gaya: " + err.message);
+  } finally {
+    setLoading(false); // 🔥 IMPORTANT
+  }
+};
 
   const getScore = () => {
     const m = aiResult.match(/ATS Score[:\s]*([0-9]+)/i);
@@ -274,8 +294,8 @@ const styles = {
 
   uploadBox: {
     border: "4px dashed #d7b5fb",
-    padding: "32px",
-    borderRadius: "12px",
+    padding: "30px",
+    borderRadius: "22px",
     cursor: "pointer",
     marginBottom: "30px",
   },
