@@ -1,16 +1,54 @@
-# React + Vite
+# 🚀 AI Resume Analyzer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered web application that analyzes resumes and provides **ATS Score, Strengths, Weaknesses, and actionable Suggestions** in seconds.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌐 Live Demo
 
-## React Compiler
+👉https://ai-resume-analyzerrr.netlify.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* 📄 Upload resumes in **PDF, DOCX, or TXT**
+* 🤖 AI-based resume analysis
+* 📊 Generates **ATS Score**
+* 💡 Highlights **Strengths & Weaknesses**
+* 🚀 Provides smart **improvement suggestions**
+* ⚡ Fast and clean user interface
+
+---
+
+## 🛠 Tech Stack
+
+* React (Vite)
+* PDF.js (for PDF parsing)
+* Mammoth.js (for DOCX parsing)
+* Groq API (LLM for analysis)
+* Netlify (deployment)
+
+---
+
+## ⚙️ Run Locally
+
+```bash
+git clone https://github.com/your-username/ai-resume-analyzer.git
+cd ai-resume-analyzer
+npm install
+npm run dev
+```
+
+---
+
+## 🚀 Deployment
+
+The project is deployed on Netlify and runs fully in the browser with API integration.
+
+---
+
+## 👨‍💻 Author
+
+Harshit Sharma
+
